@@ -1,22 +1,27 @@
-'use server';
+"use server";
 
-import { signUpSchema, signInSchema } from '@/lib/schemas/authSchemas';
-import { db, userTable } from '@/lib/db';
-import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
-import { generateIdFromEntropySize } from 'lucia';
-import { lucia } from '@/lib/auth';
-import { cookies } from 'next/headers';
+import { signUpSchema, signInSchema } from "@/lib/schemas/authSchemas";
+import { db, userTable } from "@/lib/db";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import { generateIdFromEntropySize } from "lucia";
+import { lucia, validateRequest } from "@/lib/auth";
+import { cookies } from "next/headers";
 
 export interface ActionResponse<T> {
   fieldError?: Partial<Record<keyof T, string | undefined>>;
   formError?: string;
 }
 
+type ActionResult = {
+  fieldError?: { username?: string; password?: string };
+  formError?: string;
+};
+
 export async function signInAction(
   _prevState: any,
   formData: FormData,
-): Promise<actionResult> {
+): Promise<ActionResult> {
   const data = Object.fromEntries(formData);
   const parsed = signInSchema.safeParse(data);
 
@@ -37,22 +42,22 @@ export async function signInAction(
     .from(userTable)
     .where(eq(userTable.username, username));
 
-  console.log('existingUser', existingUser);
+  console.log("existingUser", existingUser);
 
   if (!existingUser) {
     return {
-      formError: 'Incorrect userame or password',
+      formError: "Incorrect userame or password",
     };
   }
 
   if (!existingUser || !existingUser?.password) {
     return {
-      formError: 'Incorrect userame or password',
+      formError: "Incorrect userame or password",
     };
   }
 
-  console.log('existingUser.password', existingUser.password);
-  console.log('password', password);
+  console.log("existingUser.password", existingUser.password);
+  console.log("password", password);
 
   const validPassword = await Bun.password.verify(
     password,
@@ -61,7 +66,7 @@ export async function signInAction(
 
   if (!validPassword) {
     return {
-      formError: 'Incorrect username or password',
+      formError: "Incorrect username or password",
     };
   }
 
@@ -72,18 +77,13 @@ export async function signInAction(
     sessionCookie.value,
     sessionCookie.attributes,
   );
-  return redirect('/');
+  return redirect("/");
 }
-
-type actionResult = {
-  fieldError?: { username?: string; password?: string };
-  formError?: string;
-};
 
 export async function signUpAction(
   _prevState: any,
   formData: FormData,
-): Promise<actionResult> {
+): Promise<ActionResult> {
   const data = Object.fromEntries(formData);
   const parsed = signUpSchema.safeParse(data);
 
@@ -101,12 +101,12 @@ export async function signUpAction(
 
   if (password !== confirmPassword) {
     return {
-      formError: 'Passwords do not match',
+      formError: "Passwords do not match",
     };
   }
 
   const passwordHash = await Bun.password.hash(password, {
-    algorithm: 'argon2id',
+    algorithm: "argon2id",
     memoryCost: 19 * 1024,
     timeCost: 2,
   });
@@ -120,7 +120,7 @@ export async function signUpAction(
 
   if (existingUser) {
     return {
-      formError: 'Username already exists',
+      formError: "Username already exists",
     };
   }
 
@@ -138,5 +138,24 @@ export async function signUpAction(
     sessionCookie.attributes,
   );
 
-  return redirect('/');
+  return redirect("/");
+}
+
+export async function signOut(): Promise<ActionResult> {
+  const { session } = await validateRequest();
+  if (!session) {
+    return {
+      formError: "Unauthorized",
+    };
+  }
+
+  await lucia.invalidateSession(session.id);
+
+  const sessionCookie = lucia.createBlankSessionCookie();
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+  return redirect("/sign-in");
 }
