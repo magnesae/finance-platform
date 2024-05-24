@@ -42,8 +42,6 @@ export async function signInAction(
     .from(userTable)
     .where(eq(userTable.username, username));
 
-  console.log("existingUser", existingUser);
-
   if (!existingUser) {
     return {
       formError: "Incorrect userame or password",
@@ -55,9 +53,6 @@ export async function signInAction(
       formError: "Incorrect userame or password",
     };
   }
-
-  console.log("existingUser.password", existingUser.password);
-  console.log("password", password);
 
   const validPassword = await Bun.password.verify(
     password,
