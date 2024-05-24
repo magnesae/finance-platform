@@ -1,7 +1,6 @@
 'use server';
 
-import { z } from 'zod';
-import { signUpSchema } from '@/lib/schemas/authSchemas';
+import { signUpSchema, signInSchema } from '@/lib/schemas/authSchemas';
 import { db, userTable } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 import { redirect } from 'next/navigation';
@@ -14,60 +13,67 @@ export interface ActionResponse<T> {
   formError?: string;
 }
 
-// export async function signInAction(
-//   _prevState: any,
-//   formData: FormData,
-// ): Promise<any> {
-//   const data = Object.fromEntries(formData);
-//   const parsed = signInSchema.safeParse(data);
+export async function signInAction(
+  _prevState: any,
+  formData: FormData,
+): Promise<actionResult> {
+  const data = Object.fromEntries(formData);
+  const parsed = signInSchema.safeParse(data);
 
-//   if (!parsed.success) {
-//     const err = parsed.error.flatten();
-//     return {
-//       fieldError: {
-//         email: err.fieldErrors.username?.[0],
-//         password: err.fieldErrors.password?.[0],
-//       },
-//     };
-//   }
+  if (!parsed.success) {
+    const err = parsed.error.flatten();
+    return {
+      fieldError: {
+        username: err.fieldErrors.username?.[0],
+        password: err.fieldErrors.password?.[0],
+      },
+    };
+  }
 
-//   const { username, password } = parsed.data;
+  const { username, password } = parsed.data;
 
-//   const existingUser = await db.query.users.findFirst({
-//     where: (table, { eq }) => eq(table.email, email),
-//   });
+  const [existingUser] = await db
+    .select()
+    .from(userTable)
+    .where(eq(userTable.username, username));
 
-//   if (!existingUser) {
-//     return {
-//       formError: 'Incorrect email or password',
-//     };
-//   }
+  console.log('existingUser', existingUser);
 
-//   if (!existingUser || !existingUser?.hashedPassword) {
-//     return {
-//       formError: 'Incorrect email or password',
-//     };
-//   }
+  if (!existingUser) {
+    return {
+      formError: 'Incorrect userame or password',
+    };
+  }
 
-//   const validPassword = await new Scrypt().verify(
-//     existingUser.hashedPassword,
-//     password,
-//   );
-//   if (!validPassword) {
-//     return {
-//       formError: 'Incorrect email or password',
-//     };
-//   }
+  if (!existingUser || !existingUser?.password) {
+    return {
+      formError: 'Incorrect userame or password',
+    };
+  }
 
-//   const session = await lucia.createSession(existingUser.id, {});
-//   const sessionCookie = lucia.createSessionCookie(session.id);
-//   cookies().set(
-//     sessionCookie.name,
-//     sessionCookie.value,
-//     sessionCookie.attributes,
-//   );
-//   return redirect(redirects.afterLogin);
-// }
+  console.log('existingUser.password', existingUser.password);
+  console.log('password', password);
+
+  const validPassword = await Bun.password.verify(
+    password,
+    existingUser.password,
+  );
+
+  if (!validPassword) {
+    return {
+      formError: 'Incorrect username or password',
+    };
+  }
+
+  const session = await lucia.createSession(existingUser.id, {});
+  const sessionCookie = lucia.createSessionCookie(session.id);
+  cookies().set(
+    sessionCookie.name,
+    sessionCookie.value,
+    sessionCookie.attributes,
+  );
+  return redirect('/');
+}
 
 type actionResult = {
   fieldError?: { username?: string; password?: string };
@@ -98,6 +104,7 @@ export async function signUpAction(
       formError: 'Passwords do not match',
     };
   }
+
   const passwordHash = await Bun.password.hash(password, {
     algorithm: 'argon2id',
     memoryCost: 19 * 1024,
@@ -109,7 +116,7 @@ export async function signUpAction(
   const [existingUser] = await db
     .select()
     .from(userTable)
-    .where(eq(userTable.id, username));
+    .where(eq(userTable.username, username));
 
   if (existingUser) {
     return {

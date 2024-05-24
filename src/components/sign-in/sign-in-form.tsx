@@ -1,5 +1,6 @@
-import Link from 'next/link';
+'use client';
 
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -13,23 +14,21 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormState } from 'react-dom';
-
-export const signInSchema = z.object({
-  username: z.string().trim().min(2).max(50),
-  password: z.string().trim().min(2).max(50),
-});
+import { signInAction } from '@/actions/auth';
+import { signInSchema } from '@/lib/schemas/authSchemas';
+import { useRef } from 'react';
 
 export function SignInForm() {
+  const [state, formAction] = useFormState(signInAction, null);
+
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -38,48 +37,84 @@ export function SignInForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signInSchema>) {
-    console.log(values);
-  }
+  const formRef = useRef<HTMLFormElement>(null);
 
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Sign in</CardTitle>
         <CardDescription>
-          Enter your username below to login to your account
+          Enter your username below to sign in to your account
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
+        <Form {...form}>
+          <form
+            className="grid gap-2"
+            ref={formRef}
+            action={formAction}
+            onSubmit={(evt) => {
+              evt.preventDefault();
+              form.handleSubmit(() => {
+                formAction(new FormData(formRef.current!));
+              })(evt);
+            }}
+          >
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Username</FormLabel>
+                  <FormControl>
+                    <Input placeholder="username" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <Link href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="space-y-2 my-2">
+              <Button type="submit" className="w-full">
+                Sign in
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/sign-in/github" className="w-full">
+                  Sign in with GitHub
+                </Link>
+              </Button>
             </div>
-            <Input id="password" type="password" required />
-          </div>
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <Button variant="outline" className="w-full">
-            Login with GitHub
-          </Button>
-        </div>
+          </form>
+        </Form>
+        {/* Handle form errors from server side */}
+        {state?.fieldError ? (
+          <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {Object.values(state.fieldError).map((err) => (
+              <li className="ml-4" key={err}>
+                {err}
+              </li>
+            ))}
+          </ul>
+        ) : state?.formError ? (
+          <p className="rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
+            {state?.formError}
+          </p>
+        ) : null}
         <div className="mt-4 text-center text-sm">
           Don&apos;t have an account?{' '}
-          <Link href="#" className="underline">
+          <Link href="/sign-up" className="underline">
             Sign up
           </Link>
         </div>

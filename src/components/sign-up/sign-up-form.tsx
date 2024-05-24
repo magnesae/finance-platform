@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,26 +12,19 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useFormState } from 'react-dom';
 import { signUpAction } from '@/actions/auth';
 import { useRef } from 'react';
-
-export const signUpSchema = z.object({
-  username: z.string().trim().min(2).max(50),
-  password: z.string().trim().min(2).max(50),
-  confirmPassword: z.string().trim().min(2).max(50),
-});
+import { signUpSchema } from '@/lib/schemas/authSchemas';
 
 export function SignUpForm() {
   const [state, formAction] = useFormState(signUpAction, null);
@@ -51,9 +43,9 @@ export function SignUpForm() {
   return (
     <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardTitle className="text-2xl">Sign up</CardTitle>
         <CardDescription>
-          Enter your information to create an account
+          Enter your information to sign up for an account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -108,17 +100,19 @@ export function SignUpForm() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Create an account
-            </Button>
-            <Button asChild variant="outline">
-              <Link href="/sign-up/github" className="w-full">
-                Sign up with GitHub
-              </Link>
-            </Button>
+            <div className="space-y-2 my-2">
+              <Button type="submit" className="w-full">
+                Create an account
+              </Button>
+              <Button asChild variant="outline">
+                <Link href="/sign-up/github" className="w-full">
+                  Sign up with GitHub
+                </Link>
+              </Button>
+            </div>
           </form>
         </Form>
-        {/* Handle form errors form server side */}
+        {/* Handle form errors from server side */}
         {state?.fieldError ? (
           <ul className="list-disc space-y-1 rounded-lg border bg-destructive/10 p-2 text-[0.8rem] font-medium text-destructive">
             {Object.values(state.fieldError).map((err) => (
@@ -134,7 +128,7 @@ export function SignUpForm() {
         ) : null}
         <div className="mt-4 text-center text-sm">
           Already have an account?{' '}
-          <Link href="#" className="underline">
+          <Link href="/sign-in" className="underline">
             Sign in
           </Link>
         </div>
