@@ -6,8 +6,10 @@ import { sessions, users } from "@/db/schema";
 // const sqlite = new Database("sqlite.db");
 // export const db = drizzle(sqlite);
 
-const pool = new pg.Pool();
-const db = drizzle(pool);
+const pool = new pg.Pool({
+  connectionString: process.env.DATABASE_URL!,
+});
+export const db = drizzle(pool);
 
 export const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 export interface DatabaseUser {

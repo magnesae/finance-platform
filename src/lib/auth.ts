@@ -3,8 +3,7 @@ import { cookies } from "next/headers";
 import { cache } from "react";
 import type { Session, User } from "lucia";
 import { adapter, type DatabaseUser } from "@/lib/db.psql";
-// sqlite
-// import { adapter, type DatabaseUser } from '@/lib/db';
+// import { adapter, type DatabaseUser } from "@/lib/db";
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {

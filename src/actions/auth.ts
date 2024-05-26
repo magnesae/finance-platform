@@ -1,13 +1,13 @@
 "use server";
 
 import { signUpSchema, signInSchema } from "@/lib/schemas/authSchemas";
-import { db } from "@/db/drizzle";
-import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { generateIdFromEntropySize } from "lucia";
 import { lucia, validateRequest } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { users } from "@/db/schema";
+import { db } from "@/lib/db.psql";
 
 export interface ActionResponse<T> {
   fieldError?: Partial<Record<keyof T, string | undefined>>;
