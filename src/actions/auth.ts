@@ -1,7 +1,8 @@
 "use server";
 
 import { signUpSchema, signInSchema } from "@/lib/schemas/authSchemas";
-import { db, userTable } from "@/lib/db";
+import { db } from "@/db/drizzle";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { generateIdFromEntropySize } from "lucia";
@@ -39,8 +40,8 @@ export async function signInAction(
 
   const [existingUser] = await db
     .select()
-    .from(userTable)
-    .where(eq(userTable.username, username));
+    .from(users)
+    .where(eq(users.username, username));
 
   if (!existingUser) {
     return {
@@ -110,8 +111,8 @@ export async function signUpAction(
 
   const [existingUser] = await db
     .select()
-    .from(userTable)
-    .where(eq(userTable.username, username));
+    .from(users)
+    .where(eq(users.username, username));
 
   if (existingUser) {
     return {
@@ -119,7 +120,7 @@ export async function signUpAction(
     };
   }
 
-  await db.insert(userTable).values({
+  await db.insert(users).values({
     id: userId,
     username: username,
     password: passwordHash,

@@ -1,15 +1,15 @@
-import { Lucia } from 'lucia';
-import { cookies } from 'next/headers';
-import { cache } from 'react';
-import { adapter } from '@/lib/db';
-
-import type { Session, User } from 'lucia';
-import type { DatabaseUser } from '@/lib/db';
+import { Lucia } from "lucia";
+import { cookies } from "next/headers";
+import { cache } from "react";
+import type { Session, User } from "lucia";
+import { adapter, type DatabaseUser } from "@/lib/db.psql";
+// sqlite
+// import { adapter, type DatabaseUser } from '@/lib/db';
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
     attributes: {
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === "production",
     },
   },
   getUserAttributes: (attributes) => {
@@ -55,9 +55,9 @@ export const validateRequest = cache(
   },
 );
 
-declare module 'lucia' {
+declare module "lucia" {
   interface Register {
     Lucia: typeof lucia;
-    DatabaseUserAttributes: Omit<DatabaseUser, 'id'>;
+    DatabaseUserAttributes: Omit<DatabaseUser, "id">;
   }
 }

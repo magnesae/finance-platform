@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { Button } from '@/components/ui/button';
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -18,13 +18,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFormState } from 'react-dom';
-import { signInAction } from '@/actions/auth';
-import { signInSchema } from '@/lib/schemas/authSchemas';
-import { useRef } from 'react';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormState } from "react-dom";
+import { signInAction } from "@/actions/auth";
+import { signInSchema } from "@/lib/schemas/authSchemas";
+import { useRef } from "react";
 
 export function SignInForm() {
   const [state, formAction] = useFormState(signInAction, null);
@@ -32,8 +32,8 @@ export function SignInForm() {
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     },
   });
 
@@ -86,7 +86,7 @@ export function SignInForm() {
                 </FormItem>
               )}
             />
-            <div className="space-y-2 my-2">
+            <div className="my-2 space-y-2">
               <Button type="submit" className="w-full">
                 Sign in
               </Button>
@@ -113,7 +113,7 @@ export function SignInForm() {
           </p>
         ) : null}
         <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?{" "}
           <Link href="/sign-up" className="underline">
             Sign up
           </Link>
