@@ -69,7 +69,9 @@ export const AccountForm = ({
             </FormItem>
           )}
         />
-        <Button>{id ? "Save changes" : "Create account"}</Button>
+        <Button className="w-full">
+          {id ? "Save changes" : "Create account"}
+        </Button>
         {!!id && (
           <Button
             type="button"

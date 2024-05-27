@@ -8,6 +8,13 @@ export const accounts = pgTable("accounts", {
   userId: text("user_id").notNull(),
 });
 
+export const categories = pgTable("categories", {
+  id: text("id").primaryKey(),
+  plaidId: text("plaid_id"),
+  name: text("name").notNull(),
+  userId: text("user_id").notNull(),
+});
+
 // Auth
 export const users = pgTable("users", {
   id: text("id").primaryKey(),

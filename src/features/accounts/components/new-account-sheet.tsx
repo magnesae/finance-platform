@@ -23,12 +23,16 @@ export const NewAccountSheet = () => {
   const mutation = useCreateAccount();
 
   const onSubmit = (values: FormValues) => {
-    mutation.mutate(values);
+    mutation.mutate(values, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
   };
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent>
+      <SheetContent side="rightFull" className="space-y-4">
         <SheetHeader>
           <SheetTitle>New Account</SheetTitle>
           <SheetDescription>
