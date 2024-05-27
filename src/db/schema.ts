@@ -34,3 +34,4 @@ export const sessions = pgTable("sessions", {
 });
 
 export const insertAccountSchema = createInsertSchema(accounts);
+export const insertCategorySchema = createInsertSchema(categories);
