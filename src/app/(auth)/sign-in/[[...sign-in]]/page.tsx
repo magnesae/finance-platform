@@ -1,5 +1,5 @@
-import { SignInForm } from '@/components/sign-in/sign-in-form';
-import Image from 'next/image';
+import { SignInForm } from "@/components/sign-in/sign-in-form";
+import Image from "next/image";
 
 const SignInPage = () => {
   return (

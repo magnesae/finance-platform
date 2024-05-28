@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { signUpAction } from "@/actions/auth";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -16,15 +16,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useFormState } from 'react-dom';
-import { signUpAction } from '@/actions/auth';
-import { useRef } from 'react';
-import { signUpSchema } from '@/lib/schemas/authSchemas';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { signUpSchema } from "@/lib/schemas/authSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRef } from "react";
+import { useFormState } from "react-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 export function SignUpForm() {
   const [state, formAction] = useFormState(signUpAction, null);
@@ -32,9 +32,9 @@ export function SignUpForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      username: '',
-      password: '',
-      confirmPassword: '',
+      username: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -127,7 +127,7 @@ export function SignUpForm() {
           </p>
         ) : null}
         <div className="mt-4 text-center text-sm">
-          Already have an account?{' '}
+          Already have an account?{" "}
           <Link href="/sign-in" className="underline">
             Sign in
           </Link>

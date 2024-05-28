@@ -1,7 +1,7 @@
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import pg from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { sessions, users } from "@/db/schema";
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { drizzle } from "drizzle-orm/node-postgres";
+import pg from "pg";
 
 // const sqlite = new Database("sqlite.db");
 // export const db = drizzle(sqlite);

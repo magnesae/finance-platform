@@ -1,8 +1,8 @@
-import { Lucia } from "lucia";
+import { adapter, type DatabaseUser } from "@/lib/db.psql";
+import { Lucia, type Session, type User } from "lucia";
 import { cookies } from "next/headers";
 import { cache } from "react";
-import type { Session, User } from "lucia";
-import { adapter, type DatabaseUser } from "@/lib/db.psql";
+
 // import { adapter, type DatabaseUser } from "@/lib/db";
 
 export const lucia = new Lucia(adapter, {

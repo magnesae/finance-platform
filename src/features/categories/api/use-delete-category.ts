@@ -1,8 +1,7 @@
-import { toast } from "sonner";
-import { InferResponseType } from "hono";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { client } from "@/lib/hono";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { InferResponseType } from "hono";
+import { toast } from "sonner";
 
 type ResponseType = InferResponseType<
   (typeof client.api.categories)[":id"]["$delete"]

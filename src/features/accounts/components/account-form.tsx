@@ -1,8 +1,4 @@
-import { z } from "zod";
-import { Trash } from "lucide-react";
-import { insertAccountSchema } from "@/db/schema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -11,7 +7,11 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { insertAccountSchema } from "@/db/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = insertAccountSchema.pick({
   name: true,

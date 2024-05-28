@@ -1,10 +1,10 @@
-import { Hono } from "hono";
 import { db } from "@/db/drizzle";
 import { categories, insertCategorySchema } from "@/db/schema";
 import { validateRequest } from "@/lib/auth";
-import { and, eq, inArray } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
+import { and, eq, inArray } from "drizzle-orm";
+import { Hono } from "hono";
 import { z } from "zod";
 
 const app = new Hono()

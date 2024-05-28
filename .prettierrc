@@ -1,4 +1,11 @@
 {
-  "plugins": ["prettier-plugin-tailwindcss"],
-  "tailwindFunctions": ["cn", "clsx", "tw"]
+  "plugins": [
+    "prettier-plugin-tailwindcss",
+    "@ianvs/prettier-plugin-sort-imports"
+  ],
+  "tailwindFunctions": ["cn", "clsx", "tw"],
+  "importOrder": ["^@core/(.*)$", "", "^@server/(.*)$", "", "^@ui/(.*)$", "", "^[./]"],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.0.0"
+  
 }

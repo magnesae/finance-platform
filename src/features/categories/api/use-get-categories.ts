@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
 import { client } from "@/lib/hono";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetCategories = () => {
   const query = useQuery({

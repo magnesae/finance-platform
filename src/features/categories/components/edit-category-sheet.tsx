@@ -5,15 +5,15 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { CategoryForm } from "@/features/categories/components/category-form";
-import { z } from "zod";
 import { insertCategorySchema } from "@/db/schema";
-import { useOpenCategory } from "@/features/categories/hooks/use-open-category";
-import { useGetCategory } from "@/features/categories/api/use-get-category";
-import { Loader2 } from "lucide-react";
-import { useEditCategory } from "@/features/categories/api/use-edit-category";
 import { useDeleteCategory } from "@/features/categories/api/use-delete-category";
+import { useEditCategory } from "@/features/categories/api/use-edit-category";
+import { useGetCategory } from "@/features/categories/api/use-get-category";
+import { CategoryForm } from "@/features/categories/components/category-form";
+import { useOpenCategory } from "@/features/categories/hooks/use-open-category";
 import { useConfirm } from "@/hooks/use-confirm";
+import { Loader2 } from "lucide-react";
+import { z } from "zod";
 
 const formSchema = insertCategorySchema.pick({
   name: true,

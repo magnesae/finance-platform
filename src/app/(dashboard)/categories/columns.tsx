@@ -1,12 +1,12 @@
 "use client";
 
+import { Actions } from "@/app/(dashboard)/categories/actions";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
-import { InferResponseType } from "hono";
 import { client } from "@/lib/hono";
-import { Actions } from "@/app/(dashboard)/categories/actions";
+import { ColumnDef } from "@tanstack/react-table";
+import { InferResponseType } from "hono";
+import { ArrowUpDown } from "lucide-react";
 
 export type ResponseType = InferResponseType<
   typeof client.api.categories.$get,

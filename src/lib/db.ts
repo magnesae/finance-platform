@@ -1,7 +1,8 @@
 import { DrizzleSQLiteAdapter } from "@lucia-auth/adapter-drizzle";
-import { drizzle } from "drizzle-orm/bun-sqlite";
 import { Database } from "bun:sqlite";
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { drizzle } from "drizzle-orm/bun-sqlite";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
 // import { sessionTable, userTable } from "@/lib/db/schema";
 
 const sqlite = new Database("sqlite.db");
