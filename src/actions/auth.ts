@@ -1,13 +1,14 @@
 "use server";
 
-import { signUpSchema, signInSchema } from "@/lib/schemas/authSchemas";
-import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import { generateIdFromEntropySize } from "lucia";
-import { lucia, validateRequest } from "@/lib/auth";
-import { cookies } from "next/headers";
 import { users } from "@/db/schema";
+import { lucia, validateRequest } from "@/lib/auth";
 import { db } from "@/lib/db.psql";
+import { signInSchema, signUpSchema } from "@/lib/schemas/authSchemas";
+import { hash, verify } from "@node-rs/argon2";
+import { eq } from "drizzle-orm";
+import { generateIdFromEntropySize } from "lucia";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export interface ActionResponse<T> {
   fieldError?: Partial<Record<keyof T, string | undefined>>;
@@ -55,10 +56,12 @@ export async function signInAction(
     };
   }
 
-  const validPassword = await Bun.password.verify(
-    password,
-    existingUser.password,
-  );
+  const validPassword = await verify(existingUser.password, password, {
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  });
 
   if (!validPassword) {
     return {
@@ -101,12 +104,18 @@ export async function signUpAction(
     };
   }
 
-  const passwordHash = await Bun.password.hash(password, {
-    algorithm: "argon2id",
-    memoryCost: 19 * 1024,
-    timeCost: 2,
-  });
+  // const passwordHash = await Bun.password.hash(password, {
+  //   algorithm: "argon2id",
+  //   memoryCost: 19 * 1024,
+  //   timeCost: 2,
+  // });
 
+  const passwordHash = await hash(password, {
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  });
   const userId = generateIdFromEntropySize(10);
 
   const [existingUser] = await db
