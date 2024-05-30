@@ -10,6 +10,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
+    "db:seed": "bun ./src/scripts/seed.ts",
     "db:psql:generate": "drizzle-kit generate --config=drizzle.config.psql.ts",
     "db:psql:migrate": "drizzle-kit migrate --config=drizzle.config.psql.ts",
     "db:psql:studio": "drizzle-kit studio --config=drizzle.config.psql.ts"
