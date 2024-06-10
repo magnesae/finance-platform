@@ -1,3 +1,4 @@
+import { Filters } from "@/components//filters";
 import { HeaderLogo } from "@/components/header-logo";
 import { Navigation } from "@/components/navigation";
 import SignOutButton from "@/components/sign-out-button";
@@ -15,6 +16,7 @@ export const Header = () => {
           <SignOutButton />
         </div>
         <WelcomeMsg />
+        <Filters />
       </div>
     </header>
   );

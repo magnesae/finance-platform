@@ -1,3 +1,33 @@
+# Finance Platform
+
+Following the tutorial of [Code With Antonio](https://www.youtube.com/watch?v=N_uNKAus0II).
+
+Using [Bun](https://bun.sh/) for the development.
+
+Used to learn about [Hono.js](https://hono.dev/) and [Next.js](https://nextjs.org/) more in depth.
+Also using [Lucia Auth](https://lucia-auth.com/) instead of Clerk.
+
+Key Features:
+
+- 📊 Interactive financial dashboard
+- 🔁 Changeable chart types
+- 🗓 Account and date filters
+- 💹 Detailed transactions table
+- ➕ Form to add transactions
+- 🧩 Customizable select components
+- 💵 Income and expense toggle
+- 🔄 CSV transaction imports
+- 🔥 API via Hono.js
+- 🪝 State management via Tanstack React Query
+- 🔐 Authentication via Lucia Auth
+- 🗑 Bulk delete and search in transactions
+- ⚙️ Bank disconnection and subscription management
+- 👤 User settings customization
+- 🌐 Built with Next.js 14
+- 🎨 Styled with TailwindCSS and Shadcn UI
+- 💾 PostgreSQL using Neon & Drizzle ORM
+- 🚀 Deployed on Vercel
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
